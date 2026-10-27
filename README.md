@@ -134,3 +134,35 @@ The final MS-QHGM definition uses the 75th percentile at each scale, equal weigh
 ## Citation
 
 If you use this repository, please cite the associated manuscript once the final bibliographic information and DOI are available.
+
+
+## Quick test
+
+A deterministic quick test is provided in
+`quick_test.py`.
+
+It checks quantile normalization, positive
+amplitude-scaling invariance, four-scale
+aggregation, and automatic ridge extraction.
+
+Install NumPy and run:
+
+```bash
+python -m pip install numpy
+python quick_test.py
+```
+
+A successful run prints:
+
+```text
+MS-QHGM quick test: PASSED
+```
+
+This lightweight test does not require the
+external `gravmag` package.
+
+Note that this test verifies the core
+normalization and aggregation functions.
+It does not reproduce the full synthetic
+gravity experiments or the Marajo Basin
+application described in the manuscript.
