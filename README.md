@@ -166,3 +166,59 @@ normalization and aggregation functions.
 It does not reproduce the full synthetic
 gravity experiments or the Marajo Basin
 application described in the manuscript.
+
+
+## External dependency: GravMag
+
+The MS-QHGM research workflows use the
+GravMag computational geophysics library,
+developed and maintained by Nelson Ribeiro-Filho.
+
+Repository:
+https://github.com/professordelimar/gravmag
+
+### Installation
+
+Clone both repositories into the same
+parent directory:
+
+```bash
+git clone https://github.com/professordelimar/gravmag.git
+git clone https://github.com/professordelimar/MS_QHGM.git
+```
+
+Install the public Python dependencies:
+
+```bash
+cd gravmag
+python -m pip install -r requirements.txt
+
+cd ../MS_QHGM
+python -m pip install -r requirements.txt
+```
+
+### Making GravMag available
+
+Set GRAVMAG_PARENT to the parent directory
+containing the cloned gravmag repository.
+
+On Windows PowerShell:
+
+```powershell
+$env:GRAVMAG_PARENT = (Resolve-Path ..).Path
+```
+
+On Linux or macOS:
+
+```bash
+export GRAVMAG_PARENT="$(cd .. && pwd)"
+```
+
+The research notebooks use the GravMag
+modules for potential-field modeling,
+spectral differentiation, upward continuation,
+and related numerical operations.
+
+The dependency should be installed or
+made importable before executing notebooks
+that require it.
