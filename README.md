@@ -62,6 +62,16 @@ Please cite the associated article when bibliographic metadata become available,
 
 Source code and reproducible synthetic core example: https://github.com/professordelimar/MS_QHGM . The associated geographical workflows require supplementary external data as documented above.
 
-## Licensing
+## License
 
-No blanket software or dataset license is asserted for this archive. See `REPRODUCIBILITY.md` and `DATA_AVAILABILITY.md` for outstanding provenance, rights and reproducibility questions. The authors should select a compatible license after verifying module and dataset ownership.
+The original source code in this repository, including the `gravmag` modules
+included here, is copyright © 2026 Nelson Ribeiro-Filho and is distributed
+under the [MIT License](LICENSE). See the `LICENSE` file for terms.
+
+This license applies to the software in this repository. Third-party dependencies
+retain their own licenses. Research data and third-party geographical materials,
+if any, are governed by their respective source terms and are not automatically
+relicensed under MIT.
+
+The separate `gravmag` repository may have different licensing terms; this
+repository's MIT license applies to the copies distributed **here**.
