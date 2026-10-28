@@ -1,224 +1,123 @@
-# MS-QHGM
+# Multiscale quantile-normalized horizontal gradients for robust gravity edge detection
 
-**Multiscale Quantile-Normalized Horizontal Gradient Magnitude for robust gravity edge detection**
+**Reproducibility repository for a manuscript submitted to *Computers & Geosciences*.**
 
-This repository contains the reference implementation, synthetic experiments, real-data notebooks, and supporting material for the MS-QHGM method. MS-QHGM combines quantile normalization of the horizontal gradient magnitude with a fixed multiscale upward-continuation scheme to improve the representation of gravity-gradient edges when source amplitudes, structural wavelengths, and noise levels vary across a study area.
+**Corresponding author:** Nelson Ribeiro-Filho  
+**Repository:** https://github.com/professordelimar/MS_QHGM  
+**Status:** Research code under verification; complete end-to-end reproduction has **not yet** been independently validated.
 
-## Associated manuscript
+## Overview
 
-**Multiscale Quantile-Normalized Horizontal Gradients for Robust Gravity Edge Detection**
+This repository contains the Python implementation and Jupyter notebooks associated with the manuscript *Multiscale quantile-normalized horizontal gradients for robust gravity edge detection*. The research investigates multiscale processing and quantile-based normalization of horizontal-gradient responses for identifying gravity-field edges, with synthetic experiments and an application to gravity data from the Marajó Basin, Brazil.
 
-The repository accompanies the manuscript submitted to *Computers & Geosciences*.
+The purpose of this repository is to provide the computational workflow, supporting routines, and instructions needed to inspect and reproduce the reported analyses. **Results should be considered reproducible only after the input data, computational environment, and numerical outputs have been independently checked.**
 
-## Method summary
-
-For each analysis height `h`, the horizontal gradient magnitude is
-
-```text
-H_h = sqrt(f_x,h^2 + f_y,h^2)
-```
-
-The scale-specific reference amplitude is the 75th percentile
+## Repository organization
 
 ```text
-lambda_h = Q_0.75(H_h)
+MS_QHGM/
+├── README.md
+├── requirements.txt                # maintain and verify dependency versions
+├── ms_qhgm.py                     # existing implementation: retain until compared
+├── edge_detection.py             # original edge-detection utilities
+├── edge_detection_fixed.py       # minimal fix for undefined `eps`
+├── gravmag/                       # local scientific-computing modules
+│   ├── __init__.py
+│   ├── auxiliars.py
+│   ├── constants.py
+│   ├── cylinder.py
+│   ├── derivative.py
+│   ├── filtering.py
+│   ├── grids.py
+│   ├── hexagonalprism.py
+│   ├── polygonalprism.py
+│   ├── prism.py
+│   ├── sphere.py
+│   ├── statistical.py
+│   └── synthetic.py
+└── notebooks/
+    ├── ms_cgtp_01_formulation.ipynb
+    ├── ms_cgtp_01_formulation_figures.ipynb
+    ├── gravdata.ipynb
+    ├── gravdata-anomaly.ipynb
+    ├── gravdata-bouguer.ipynb
+    ├── gravdata-bouguer_corrected.ipynb
+    ├── gravdata-disturbance.ipynb
+    ├── gravdata-isostatic.ipynb
+    ├── gravdata-Copy1.ipynb
+    ├── location-marajo(1)_modified.ipynb
+    └── location-marajo(2)_modified.ipynb
 ```
 
-and the quantile-normalized response is
+The listed notebooks and Python files correspond to a consolidated source-code archive. Other existing repository files, if present, should be examined before deletion; the published `ms_qhgm.py` is not included in the archive and has not yet been compared against the other implementations.
 
-```text
-Q_h = H_h / (H_h + lambda_h)
-```
+## Requirements and installation
 
-The fixed analysis heights are
-
-```text
-{0, 5*Delta, 10*Delta, 20*Delta}
-Delta = max(dx, dy)
-```
-
-The normalized responses are averaged with equal weights and the final mean is rescaled to `[0, 1]`.
-
-## Repository contents
-
-### Reference code
-
-- `ms_qhgm.py`: clean reference implementation of HGM, QHGM and MS-QHGM.
-- `edge_detection.py`: automatic local-maximum ridge extraction with Otsu thresholding.
-
-### Synthetic experiments
-
-- `ms_cgtp_01_formulation.ipynb`: development notebook containing the synthetic methodology, sensitivity tests, and earlier formulation history.
-- `ms_cgtp_01_formulation_figures.ipynb`: development notebook used to prepare synthetic figures and quantitative comparisons.
-
-These two notebooks preserve the methodological development history. The final method specification is the formulation described in `ms_qhgm.py` and in the manuscript.
-
-### Marajó Basin application
-
-- `gravdata-bouguer.ipynb`: Bouguer-field application.
-- `gravdata-bouguer_corrected.ipynb`: corrected Bouguer-field application.
-- `gravdata-disturbance.ipynb`: gravity-disturbance application.
-- `gravdata-isostatic.ipynb`: isostatic-disturbance application.
-- `gravdata-anomaly.ipynb`: gravity-anomaly application.
-- `gravdata.ipynb`: complete real-data processing notebook.
-- `location-marajo(1)_modified.ipynb`: regional location map.
-- `location-marajo(2)_modified.ipynb`: Marajó Basin outline workflow.
-- `marajo_data.xyz`: gridded gravity dataset used by the real-data notebooks.
-
-The manuscript uses the corrected Bouguer field as the principal real-data application.
-
-## External files required by the real-data notebooks
-
-Two shapefile datasets referenced by the notebooks were not present in the source archive used to prepare this repository package:
-
-```text
-marajo_basin_shapefile/marajo_basin.shp
-estrutural_marajo/estrutural_marajo.shp
-```
-
-Place the complete shapefile sets in those directories before running the map and structural-overlay cells.
-
-The notebooks also use a local `gravmag` package that provides the spectral derivative, upward-continuation, grid, synthetic, and prism routines used in the study. Set the environment variable `GRAVMAG_PARENT` to the directory containing the `gravmag` package before starting Jupyter.
-
-Windows PowerShell example:
-
-```powershell
-$env:GRAVMAG_PARENT="C:\path\to\geophysics"
-```
-
-Linux or macOS example:
+Python 3 and Jupyter are required. Relevant imports found in the notebooks include NumPy, SciPy, Matplotlib, pandas, `cmcrameri`, GeoPandas, Cartopy and other geospatial libraries; the exact environment and versions must be verified for full reproduction.
 
 ```bash
-export GRAVMAG_PARENT=/path/to/geophysics
+git clone https://github.com/professordelimar/MS_QHGM.git
+cd MS_QHGM
+python -m venv .venv
+# Linux/macOS:
+source .venv/bin/activate
+# Windows PowerShell:
+# .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install jupyter
 ```
 
-## Installation
+**Important:** The existing `requirements.txt` must be checked and updated to include all actually used dependencies and compatible versions. This installation procedure has not been validated on a fresh machine.
 
-Create a Python environment and install the public dependencies:
+## Using the source code
+
+From the repository root:
 
 ```bash
-pip install -r requirements.txt
+python -c "from gravmag import filtering, derivative, grids, synthetic, prism; print('gravmag imports OK')"
+python -c "import edge_detection_fixed; print('edge detection imports OK')"
+python -m jupyter notebook
 ```
 
-Then make sure the project-specific `gravmag` package is available through `GRAVMAG_PARENT` or already importable in the active Python environment.
+Open `notebooks/ms_cgtp_01_formulation.ipynb` for the method-oriented experiments and `notebooks/ms_cgtp_01_formulation_figures.ipynb` for the related figures. The `gravdata-*.ipynb` and `location-marajo*.ipynb` notebooks are related to gravity-data processing and visualization for the Marajó Basin.
 
-## Running the notebooks
+**Working-directory warning:** Some notebooks originally used absolute local paths for `gravmag` and external data. Update these paths to the repository root and the local input-data directories before running. Import success is not a substitute for verifying the numerical outputs.
 
-Start Jupyter from the repository root so that the relative paths to `marajo_data.xyz`, the shapefile directories, and `results/` remain valid:
+## Data availability and reproducibility limitations
 
-```bash
-jupyter notebook
-```
+The Jupyter notebooks for the Marajó Basin reference external geographical inputs, including ESRI Shapefiles such as `marajo_basin.shp` and `estrutural_marajo/estrutural_marajo.shp`. A complete Shapefile usually comprises several companion files (for example, `.shp`, `.shx`, `.dbf`, and `.prj`). Other potential-field datasets and local file paths may also be required.
 
-The notebooks write generated figures to `results/`. Generated outputs in that directory are ignored by Git.
+These datasets **are not part of the code-only archive** and their publication rights, provenance, processing history, and download locations must be documented before full reproduction can be claimed. Do not assume the notebooks will run without these inputs.
 
-## Real-data grid used in the manuscript
+Recommended validation steps before journal resubmission:
 
-The Marajó Basin dataset is processed on a `201 x 141` grid with approximate spacings of `5.561 km` and `5.529 km`. The MS-QHGM analysis heights are therefore approximately `0`, `27.804`, `55.607`, and `111.214 km`.
+1. Confirm the license and attribution of every included `gravmag` component.
+2. Resolve notebook-local and absolute data paths.
+3. Pin tested dependency versions in `requirements.txt` or an environment lock file.
+4. Provide a small self-contained example with known inputs and expected numerical outputs.
+5. Run the key notebooks in a clean environment and compare their generated figures and quantitative values with those in the manuscript.
+6. Add an exact commit hash or archived release to the manuscript's Code Availability statement.
 
-## Automatic ridge extraction
+## Method and provenance
 
-The post-processing detector used for HGM, QHGM, and MS-QHGM:
+The implementation uses potential-field operations from the included `gravmag` modules, together with edge-detection routines and the multiscale workflows in the notebooks. The complete mathematical definitions, processing parameters, synthetic configurations, and interpretation of the Marajó Basin results are described in the associated manuscript.
 
-1. normalizes each response independently to `[0, 1]`;
-2. identifies local maxima along either horizontal grid direction;
-3. applies an Otsu threshold computed from the response itself;
-4. removes the outer four grid cells.
-
-Geological information is not used by the detector.
-
-## Reproducibility note
-
-The final MS-QHGM definition uses the 75th percentile at each scale, equal weighting across the four normalized scales, and final min-max normalization. These parameters are fixed across the synthetic and real-data analyses. Upward-continuation heights are analysis scales and should not be interpreted directly as source depths.
+The repository contains two versions of the edge utility script: `edge_detection.py` is retained as the original, while `edge_detection_fixed.py` defines the numerical epsilon `eps` used by the original functions. The revised file has received only a minimal correction; equivalence of all downstream scientific results has **not** been established.
 
 ## Citation
 
-If you use this repository, please cite the associated manuscript once the final bibliographic information and DOI are available.
+If this software supports your research, cite the associated manuscript **once publication metadata are available**, and identify the exact repository commit or release used. Until publication, please refer to the repository title, author, GitHub URL, and commit identifier; do not invent a DOI.
 
+## Code availability for the manuscript
 
-## Quick test
+The code associated with this study is maintained at https://github.com/professordelimar/MS_QHGM. A specific version (commit/release), computational environment, example inputs, and validation outputs should be recorded before the final editorial resubmission.
 
-A deterministic quick test is provided in
-`quick_test.py`.
+## License and third-party attribution
 
-It checks quantile normalization, positive
-amplitude-scaling invariance, four-scale
-aggregation, and automatic ridge extraction.
+Do not assume that all `gravmag` modules and derived materials are eligible for redistribution under the same license. Preserve original copyright and attribution notices, and add or reconcile a repository `LICENSE` file only after confirming ownership and third-party licensing conditions. Dataset licenses may differ from software licenses.
 
-Install NumPy and run:
+## Contact
 
-```bash
-python -m pip install numpy
-python quick_test.py
-```
-
-A successful run prints:
-
-```text
-MS-QHGM quick test: PASSED
-```
-
-This lightweight test does not require the
-external `gravmag` package.
-
-Note that this test verifies the core
-normalization and aggregation functions.
-It does not reproduce the full synthetic
-gravity experiments or the Marajo Basin
-application described in the manuscript.
-
-
-## External dependency: GravMag
-
-The MS-QHGM research workflows use the
-GravMag computational geophysics library,
-developed and maintained by Nelson Ribeiro-Filho.
-
-Repository:
-https://github.com/professordelimar/gravmag
-
-### Installation
-
-Clone both repositories into the same
-parent directory:
-
-```bash
-git clone https://github.com/professordelimar/gravmag.git
-git clone https://github.com/professordelimar/MS_QHGM.git
-```
-
-Install the public Python dependencies:
-
-```bash
-cd gravmag
-python -m pip install -r requirements.txt
-
-cd ../MS_QHGM
-python -m pip install -r requirements.txt
-```
-
-### Making GravMag available
-
-Set GRAVMAG_PARENT to the parent directory
-containing the cloned gravmag repository.
-
-On Windows PowerShell:
-
-```powershell
-$env:GRAVMAG_PARENT = (Resolve-Path ..).Path
-```
-
-On Linux or macOS:
-
-```bash
-export GRAVMAG_PARENT="$(cd .. && pwd)"
-```
-
-The research notebooks use the GravMag
-modules for potential-field modeling,
-spectral differentiation, upward continuation,
-and related numerical operations.
-
-The dependency should be installed or
-made importable before executing notebooks
-that require it.
+**Nelson Ribeiro-Filho** — corresponding author.  
+GitHub: https://github.com/professordelimar
