@@ -19,6 +19,8 @@ This repository provides the MS-QHGM numerical implementation, edge-ridge detect
 - `tests/`: numerical and edge-detection regression tests.
 - `notebooks/`: research notebooks with code preserved and saved outputs cleared.
 - `marajo_data.xyz`: original XYZ data.
+- `DATA_AVAILABILITY.md`: scope and provenance limitations for real-data inputs.
+- `REPRODUCIBILITY.md`: independently repeatable checks and remaining validation tasks.
 - `requirements.txt`: core Python requirements.
 - `requirements-notebooks.txt`: optional geospatial and notebook requirements; platform-specific dependencies may require additional setup.
 
@@ -62,4 +64,4 @@ Source code and reproducible synthetic core example: https://github.com/professo
 
 ## Licensing
 
-No blanket software or dataset license is asserted for this archive; original module and data provenance must be confirmed before selecting a repository-wide license.
+No blanket software or dataset license is asserted for this archive. See `REPRODUCIBILITY.md` and `DATA_AVAILABILITY.md` for outstanding provenance, rights and reproducibility questions. The authors should select a compatible license after verifying module and dataset ownership.
